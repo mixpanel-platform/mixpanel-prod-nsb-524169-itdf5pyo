@@ -387,7 +387,6 @@
         // append converted and dropped sections of funnel bar, event label
         var dropped = first ? '' : dropped;
         var funnelStep = $('<div class="funnel-step"></div>').appendTo(funnelGraph);
-        $('<div class="dropped">' + dropped + '</div>').css({'height': dropped*ratio + 'px', 'line-height': dropped*ratio + 'px'}).appendTo(funnelStep);
         $('<div class="converted">' + converted + '</div>').css({'height': converted*ratio + 'px', 'line-height': converted*ratio + 'px'}).appendTo(funnelStep).addClass(first);
         $('<div class="column-label" title="' + eventName + '">' + eventName + '</div>').appendTo(funnelStep);
       }
