@@ -287,7 +287,6 @@
     </div>
     <script>
       var event_list = [];
-      var path_length = 3;
       var funnel_select = [];
       
       // add events
@@ -310,6 +309,7 @@
       $(document).ready(function() {
         addEvent(0);
       });
+      
       $('#add').on('click', function() {
         var numEvents = $('.event_select').length;
         addEvent(numEvents);
@@ -339,24 +339,7 @@
         }
         event_list = events;
         runQuery();
-      });
-      $('#funnel-query').on('click', function() {
-        var newEvents = [];
-        
-        var root = d3.selectAll(".root");
-        root.each(function(d,i) {
-          var index = d.name.indexOf(':');
-          newEvents.push(d.name.substr(index+2));
-
-          var result = getFlowSteps(d, newEvents);
-          if (result != 'error' && result != undefined) {
-            resetEvents();
-            event_list = newEvents;
-            runQuery();
-          }
-        });
-      });
-
+      });\
       function runQuery() {
         // clear previous query
         $('#funnel').html('');
@@ -381,14 +364,7 @@
         MP.api.jql(script, queryParams).done(function(results) {
           jqlResult = results[0];
           debugger
-          for (var i = 0; i < event_list.length; i++) {
-            var first = i == 0 ? true : false;
-            if (first) {
-              addFunnelStep(event_list[i], jqlResult[i].count, 0, first);
-            } else {
-              addFunnelStep(event_list[i], jqlResult[i].count, jqlResult[i-1].count-jqlResult[i].count, first);
-            }
-          }
+          _.each(event_list, (k, i) => addFunnelStep(k, jqlResult[k], i, i == 0 ? true : false ))
         });
         $('#report').show();
       }
